@@ -1,7 +1,7 @@
 # evogrowthpy (version 1.0.0)
-This repository contains the source code of evogrowthpy, a python wrapper for a fast code to compute the scale-independent growth factor for wACDM models of interacting dark energy. The main computations are performed in C++ using a code based on part of ReACT by Ben Bose.
+This repository contains the source code of evogrowthpy, a python wrapper for a fast code to compute the scale-independent growth factor for wACDM models of interacting dark energy. The main computations are performed in C++ using a code based on part of [ReACT](https://github.com/nebblu/ReACT).
 
-Authors:   Pedro Carrilho<br/>
+Authors:   Pedro Carrilho, Ben Bose<br/>
 Date of last update:    September 2022<br/>
 
 <b>Contact information:</b> If you have any questions, contact Pedro Carrilho (pedromgcarrilhoATgmail.com) or post an issue on this page.
