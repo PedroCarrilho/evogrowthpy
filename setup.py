@@ -20,6 +20,9 @@ extensions=Extension(name=pack_name,
 
 
 setup(name=pack_name,
+      version="1.0.0",
+      author="Pedro Carrilho",
+      author_email="pedromgcarrilho@gmail.com",
       cmdclass={'build_ext': build_ext},
       ext_modules = cythonize(extensions,language_level = 3),
       packages=[pack_name],
