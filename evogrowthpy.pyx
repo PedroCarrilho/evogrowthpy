@@ -22,7 +22,7 @@ import warnings as _warnings
 # Import the C++ functions
 
 cdef extern from "Evo.h":
-    void get_growth(double A, double omega0, double omegacb, double h, double w0, double wa, double xi, double * res, double accuracy);
+    void get_growth(double A, double omega0, double omegacb, double h, double w0, double wa, double xi, double Om_rc, double * res, double accuracy);
 
 
 def get_growth_wrap(omega0,hubble,par, accuracy=1e-3,om_cb=0):
@@ -31,16 +31,24 @@ def get_growth_wrap(omega0,hubble,par, accuracy=1e-3,om_cb=0):
       omega_cb=om_cb
     else:
       omega_cb=omega0
-    
+
     z_real=par[0]
     w0=par[1]
     wa=par[2]
-    xi=par[3]
+    if len(par)>=4:
+        xi=par[3]
+    else:
+        xi=0
+    if len(par)==5:
+        Om_rc=par[4]
+    else:
+        Om_rc=0
+
     res=np.zeros(2)
 
     cdef double* DF = <double *> PyMem_Malloc(2 * sizeof(double))
 
-    get_growth(1./(1.+z_real),omega0,omega_cb,hubble,w0,wa,xi,DF,accuracy)
+    get_growth(1./(1.+z_real),omega0,omega_cb,hubble,w0,wa,xi,Om_rc,DF,accuracy)
 
     res[0]=DF[0]
     res[1]=DF[1]

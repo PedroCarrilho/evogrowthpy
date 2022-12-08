@@ -29,6 +29,7 @@ struct param_type2 {
   double par1;
 	double par2;
 	double par3;
+	double par4;
 };
 
 int jac (double a, const double G[], double *dfdy, double dfdt[], void *params)
@@ -61,7 +62,7 @@ static double HA2de2(double a, double omega0, double w0, double wa){
 }
 
 
-// linear growth factor for wCDM CPL with interaction
+// linear growth factor for wCDM CPL with interaction and nDGP
 int evo_eqs_ide(double a, const double G[], double F[], void *params)
 {
 	param_type2 p = *(param_type2 *)(params);
@@ -71,30 +72,38 @@ int evo_eqs_ide(double a, const double G[], double F[], void *params)
 	double w0 = p.par1;
 	double wa = p.par2;
 	double xi = p.par3;
+	double Omega_rc = p.par4;
 
 
-	double A, omegaf, omegaL, fric,hade1,hade2,f_cb;
+	double A, omegaf, omegaL, fric,hade,hade1,hade2,f_cb,muphi;
 
 	A = -3.*(1.+w0+wa);
 	omegaf = pow(a,A)*exp(3.*(-1.+a)*wa);
 	omegaL= (1.-omega0)*omegaf;
-	fric = (1.+w0+(1.-a)*wa)*omegaL*xi*hubble/HAde(a,omega0,w0,wa)*0.0974655;
+	hade = HAde(a,omega0,w0,wa);
+	fric = (1.+w0+(1.-a)*wa)*omegaL*xi*hubble/hade*0.0974655;
 	hade1 = HA2de(a,omega0,w0,wa);
 	hade2 = HA2de2(a,omega0,w0,wa);
+
+	if(Omega_rc == 0){
+		muphi = 1.0;
+	}
+	else{
+		muphi = 1.0 + 1.0 / (3.0 * (1.0 + hade / sqrt(Omega_rc) * (1.0 + HA1de(a,omega0,w0,wa)/(3.0*hade*hade))));
+	}
 
 	f_cb = omega_cb/omega0;
 
 	F[0] = -G[1]/a;
-	F[1] =1./a*(-(2.+fric-hade1)*G[1]-f_cb*hade2*G[0]);
+	F[1] =1./a*(-(2.+fric-hade1)*G[1]-f_cb*hade2*muphi*G[0]);
 
 	return GSL_SUCCESS;
 }
 
-
-void get_growth(double A, double omega0, double omegacb, double h,double w0, double wa, double xi, double * res, double accuracy)
+void get_growth(double A, double omega0, double omegacb, double h,double w0, double wa, double xi, double Om_rc, double * res, double accuracy)
 {
 
-	struct param_type2 params_my = {omega0,omegacb,h,w0,wa,xi};
+	struct param_type2 params_my = {omega0,omegacb,h,w0,wa,xi,Om_rc};
 
 	//Initial a
 	double a = 0.0001;

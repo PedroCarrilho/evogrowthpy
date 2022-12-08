@@ -1,5 +1,5 @@
 # evogrowthpy (version 1.0.0)
-This repository contains the source code of evogrowthpy, a python wrapper for a fast code to compute the scale-independent growth factor for wACDM models of interacting dark energy. The main computations are performed in C++ using a code based on part of [ReACT](https://github.com/nebblu/ReACT).
+This repository contains the source code of evogrowthpy, a python wrapper for a fast code to compute the scale-independent growth factor for wACDM models of interacting dark energy and for the nDGP model of modified gravity. The main computations are performed in C++ using a code based on part of [ReACT](https://github.com/nebblu/ReACT).
 
 Authors:   Pedro Carrilho, Ben Bose<br/>
 Date of last update:    September 2022<br/>
@@ -42,9 +42,9 @@ import evogrowthpy as evgr
 ```
 and use the function `get_growth_wrap`
 ```
-D, f = evgr.get_growth_wrap(Omm, hubble, [z, w0, wa, xi], accuracy=1e-3, om_cb=0)
+D, f = evgr.get_growth_wrap(Omm, hubble, [z, w0, wa, xi, Omega_rc], accuracy=1e-3, om_cb=0)
 ```
-where `Omm` is the total matter density parameter, `hubble` is the Hubble constant divided by 100, `z` is the redshift, `w0` is the EOS parameter of dark energy and `wa` is its derivative w.r.t. `a` and `xi` is the interaction parameter of the dark scattering model. The `accuracy` is set to `1e-3` which should be sufficient in most cases. The parameter `om_cb` is set to `0` by default and should only be non-zero when massive neutrinos are present (i.e. when `Om_cb != Om_m`) and the user wishes to calculate the growth rate on small scales.
+where `Omm` is the total matter density parameter, `hubble` is the Hubble constant divided by 100, `z` is the redshift, `w0` is the EOS parameter of dark energy and `wa` is its derivative w.r.t. `a`. `xi` is the interaction parameter of the dark scattering model and `Omega_rc` is the parameter of nDGP. The `accuracy` is set to `1e-3` which should be sufficient in most cases. The parameter `om_cb` is set to `0` by default and should only be non-zero when massive neutrinos are present (i.e. when `Om_cb != Om_m`) and the user wishes to calculate the growth rate on small scales.
 
 The output of this function is always composed of the growth factor `D` and the growth rate `f`, with `D` normalised to be equal to the scale factor `a` at early times.
 
